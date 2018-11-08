@@ -15,12 +15,9 @@ public class Game implements Runnable {
     private GamePlay gamePlay;
     private Runnable onFinishListener;
 
-    public Game(GameDisplay gameDisplay) {
+    public Game(GameDisplay gameDisplay, Runnable onFinishListener) {
         this.gameDisplay = gameDisplay;
-    }
-
-    public void setOnFinishListener(Runnable action) {
-        this.onFinishListener = action;
+        this.onFinishListener = onFinishListener;
     }
 
     @Override
@@ -30,15 +27,18 @@ public class Game implements Runnable {
         onFinishListener.run();
     }
 
-    private void showHomeView() {
+    public void showHomeView() {
         HomeView homeView = new HomeView((s) -> {
-//            showGameView();
-//            TODO: Create a character
+            showCreateCharacterView();
         });
 
         gameDisplay.draw(new MainDecoratorView(homeView, (s) -> {
             onFinishListener.run();
         }));
+    }
+
+    public void showCreateCharacterView() {
+        
     }
 
 }

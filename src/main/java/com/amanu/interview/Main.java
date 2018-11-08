@@ -7,8 +7,7 @@ public class Main {
     public static void main(String[] args) {
         GameDisplay gameDisplay = GameDisplayFactory.createCLIGameDisplay();
 
-        Game game = new Game(gameDisplay);
-        game.setOnFinishListener(() -> {
+        Game game = new Game(gameDisplay, () -> {
             System.exit(0);
         });
 

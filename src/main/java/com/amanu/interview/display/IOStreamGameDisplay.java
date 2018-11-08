@@ -17,7 +17,7 @@ public class IOStreamGameDisplay implements GameDisplay {
     private final InputStream in;
     private Scanner scanner;
 
-    IOStreamGameDisplay(PrintStream out, InputStream in) {
+    public IOStreamGameDisplay(PrintStream out, InputStream in) {
         this.out = out;
         this.in = in;
 
@@ -56,7 +56,7 @@ public class IOStreamGameDisplay implements GameDisplay {
         }
     }
 
-    int waitForMenuIndexInput(int totalMenus) {
+    public int waitForMenuIndexInput(int totalMenus) {
         String input = scanner.nextLine();
         int index = Integer.parseInt(input);
 
