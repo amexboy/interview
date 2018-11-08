@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DecoratorView implements View {
+public class MainDecoratorView implements View {
 
     private final View view;
     private Consumer<String> onExit;
 
-    public DecoratorView(View view, Consumer<String> onExit) {
+    public MainDecoratorView(View view, Consumer<String> onExit) {
         this.view = view;
         this.onExit = onExit;
     }

@@ -2,7 +2,7 @@ package com.amanu.interview;
 
 import com.amanu.interview.display.GameDisplay;
 import com.amanu.interview.game.GamePlay;
-import com.amanu.interview.view.DecoratorView;
+import com.amanu.interview.view.MainDecoratorView;
 import com.amanu.interview.view.HomeView;
 
 /**
@@ -36,7 +36,7 @@ public class Game implements Runnable {
 //            TODO: Create a character
         });
 
-        gameDisplay.draw(new DecoratorView(homeView, (s) -> {
+        gameDisplay.draw(new MainDecoratorView(homeView, (s) -> {
             onFinishListener.run();
         }));
     }
