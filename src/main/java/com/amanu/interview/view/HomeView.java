@@ -1,4 +1,4 @@
-package com.amanu.interview;
+package com.amanu.interview.view;
 
 import java.util.ArrayList;
 import java.util.List;

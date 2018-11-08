@@ -1,4 +1,4 @@
-package com.amanu.interview;
+package com.amanu.interview.game;
 
 import java.util.List;
 

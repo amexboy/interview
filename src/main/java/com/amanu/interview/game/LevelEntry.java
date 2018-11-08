@@ -1,4 +1,4 @@
-package com.amanu.interview;
+package com.amanu.interview.game;
 
 /**
  * @author Amanuel Nega on November 07, 2018.

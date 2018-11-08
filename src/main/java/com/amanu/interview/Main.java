@@ -1,5 +1,8 @@
 package com.amanu.interview;
 
+import com.amanu.interview.display.GameDisplay;
+import com.amanu.interview.display.GameDisplayFactory;
+
 public class Main {
     public static void main(String[] args) {
         GameDisplay gameDisplay = GameDisplayFactory.createCLIGameDisplay();
