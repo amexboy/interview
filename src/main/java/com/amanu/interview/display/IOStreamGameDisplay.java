@@ -52,7 +52,7 @@ public class IOStreamGameDisplay implements GameDisplay {
             }
 
             Menu menu = menus.get(index - 1);
-            menu.getConsumer().accept(menu.getTitle());
+            menu.getConsumer().accept(menu);
         }
     }
 

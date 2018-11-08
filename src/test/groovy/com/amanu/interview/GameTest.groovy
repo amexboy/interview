@@ -60,6 +60,14 @@ class GameTest extends Specification {
         then:
         verify(game, times(1)).showCreateCharacterView()
 
+        def output = out.toString()
+        
+        output.contains("Which hero/heroin do you want to be?")
+        output.contains("1. Tarzan")
+        output.contains("2. Robin Hood")
+        output.contains("3. Ashwini")
+        output.contains("4. Rad")
+
     }
 
 }

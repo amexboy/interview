@@ -2,8 +2,9 @@ package com.amanu.interview;
 
 import com.amanu.interview.display.GameDisplay;
 import com.amanu.interview.game.GamePlay;
-import com.amanu.interview.view.MainDecoratorView;
+import com.amanu.interview.view.CreateCharacterView;
 import com.amanu.interview.view.HomeView;
+import com.amanu.interview.view.MainDecoratorView;
 
 /**
  * @author Amanuel Nega on November 07, 2018.
@@ -28,7 +29,7 @@ public class Game implements Runnable {
     }
 
     public void showHomeView() {
-        HomeView homeView = new HomeView((s) -> {
+        HomeView homeView = new HomeView((m) -> {
             showCreateCharacterView();
         });
 
@@ -38,7 +39,8 @@ public class Game implements Runnable {
     }
 
     public void showCreateCharacterView() {
-        
+        gameDisplay.draw(new CreateCharacterView((menu) -> {
+        }));
     }
 
 }

@@ -7,9 +7,9 @@ import java.util.function.Consumer;
 public class MainDecoratorView implements View {
 
     private final View view;
-    private Consumer<String> onExit;
+    private Consumer<Menu> onExit;
 
-    public MainDecoratorView(View view, Consumer<String> onExit) {
+    public MainDecoratorView(View view, Consumer<Menu> onExit) {
         this.view = view;
         this.onExit = onExit;
     }

@@ -11,7 +11,7 @@ public class HomeView implements View {
 
     private List<Menu> menus;
 
-    public HomeView(Consumer<String> onStart) {
+    public HomeView(Consumer<Menu> onStart) {
         this.menus = new ArrayList<>();
 
         this.menus.add(new Menu("Start Game", onStart));
