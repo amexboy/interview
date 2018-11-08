@@ -3,17 +3,37 @@ package com.amanu.interview;
 /**
  * @author Amanuel Nega on November 07, 2018.
  */
-public class Game {
+public class Game implements Runnable {
     
     private GameDisplay gameDisplay;
     
     private GamePlay gamePlay;
-    
+    private Runnable onFinishListener;
 
-    /*void restore(GamePlay gamePlay);
+    public Game(GameDisplay gameDisplay) {
+        this.gameDisplay = gameDisplay;
+    }
 
-    GamePlay saveGamePlay();
+    public void setOnFinishListener(Runnable action) {
+        this.onFinishListener = action;
+    }
 
-    void notifyDisplays();*/
+    @Override
+    public void run() {
+        showHomeView();
+
+        onFinishListener.run();
+    }
+
+    private void showHomeView() {
+        HomeView homeView = new HomeView((s) -> {
+//            showGameView();
+//            TODO: Create a character
+        });
+
+        gameDisplay.draw(new DecoratorView(homeView, (s) -> {
+            onFinishListener.run();
+        }));
+    }
 
 }

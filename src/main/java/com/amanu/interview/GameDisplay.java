@@ -5,6 +5,6 @@ package com.amanu.interview;
  */
 public interface GameDisplay {
     
-    void draw(GamePlay gamePlay);
+    void draw(View view);
 
 }

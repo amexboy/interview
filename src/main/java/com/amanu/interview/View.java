@@ -1,5 +1,7 @@
 package com.amanu.interview;
 
+import java.util.List;
+
 /**
  * @author Amanuel Nega on November 07, 2018.
  */
@@ -7,8 +9,8 @@ public interface View {
     
     String getTitle();
     
-    String getHeader();
-    
-    String getName();
+    default String getHeader() {return "";}
+
+    List<Menu> getMenus();
 
 }
