@@ -4,23 +4,23 @@ package com.amanu.interview.game;
  * @author Amanuel Nega on November 07, 2018.
  */
 public class GamePlay {
-    
-    private String name;
-    private Integer points;
+
+    private final String name;
+    private Integer points = 0;
+
+    public GamePlay(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
-        this.points = points;
+    public void addToPoints(int points) {
+        this.points += points;
     }
 }

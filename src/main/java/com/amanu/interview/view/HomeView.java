@@ -28,7 +28,7 @@ public class HomeView implements View {
                 "\n\n" +
                 "You'll be learning a little bit of Amharic with this Game." +
                 "\nYou will be taken through some lessons and at the end you'll take pop quizes." +
-                "\nEach step on the lesson counts as 1 experience and the pop quiz counts as 5" +
+                "\nEach step on the lesson counts as 1 experience and the pop quiz counts as 7" +
                 "\nYou'll get to the next level when you get to 13 experiences." +
                 "\n\n\n\n" +
                 "Enjoy";

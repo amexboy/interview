@@ -42,4 +42,14 @@ public class LevelEntry {
     public void setFemaleTranslation(String femaleTranslation) {
         this.femaleTranslation = femaleTranslation;
     }
+
+    public static LevelEntry of(String phrase, String maleTranslation, String femaleTranslation) {
+        LevelEntry entry = new LevelEntry();
+
+        entry.setPhrase(phrase);
+        entry.setMaleTranslation(maleTranslation);
+        entry.setFemaleTranslation(femaleTranslation);
+
+        return entry;
+    }
 }

@@ -1,25 +1,39 @@
 package com.amanu.interview.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Amanuel Nega on November 07, 2018.
  */
-public interface GameLevel {
+public class GameLevel {
 
-    /**
-     * The entries involved in this level
-     *
-     * @return the level entries that will be involved in this level
-     */
-    List<LevelEntry> getLevelEntries();
+    private List<LevelEntry> levelEntries;
 
-    /**
-     * Checks if the amount of experience is enough to play at this level
-     *
-     * @param experiences, the amount of experience to check
-     * @return true if the amount of experience is enough to play this level, false otherwise
-     */
-    boolean qualifies(Integer experiences);
+    public List<LevelEntry> getLevelEntries() {
+        if (levelEntries == null) {
+            levelEntries = new ArrayList<>();
+        }
+
+        return levelEntries;
+    }
+
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static class Builder {
+        private GameLevel gameLevel = new GameLevel();
+
+        public Builder addLevelEntry(LevelEntry entry) {
+            gameLevel.getLevelEntries().add(entry);
+
+            return this;
+        }
+
+        public GameLevel build() {
+            return gameLevel;
+        }
+    }
 
 }
