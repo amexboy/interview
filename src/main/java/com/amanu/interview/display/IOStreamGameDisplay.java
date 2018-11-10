@@ -37,8 +37,9 @@ public class IOStreamGameDisplay implements GameDisplay {
         }
 
         if (!menus.isEmpty()) {
-            int index;
-            while (true) {
+            int index = -1;
+            
+            for (int i = 0; i < 5; i++) {
                 out.println("Enter your choice: ");
 
 
@@ -51,8 +52,10 @@ public class IOStreamGameDisplay implements GameDisplay {
                 }
             }
 
-            Menu menu = menus.get(index - 1);
-            menu.getConsumer().accept(menu);
+            if (index > 0) {
+                Menu menu = menus.get(index - 1);
+                menu.getConsumer().accept(menu);
+            }
         }
     }
 
