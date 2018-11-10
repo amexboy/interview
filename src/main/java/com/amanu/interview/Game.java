@@ -4,10 +4,7 @@ import com.amanu.interview.display.GameDisplay;
 import com.amanu.interview.game.GameLevel;
 import com.amanu.interview.game.GamePlay;
 import com.amanu.interview.game.LevelEntry;
-import com.amanu.interview.view.CreateCharacterView;
-import com.amanu.interview.view.GamePlayView;
-import com.amanu.interview.view.HomeView;
-import com.amanu.interview.view.MainDecoratorView;
+import com.amanu.interview.view.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,14 +14,17 @@ import java.util.List;
  * @author Amanuel Nega on November 07, 2018.
  */
 public class Game implements Runnable {
-    
+
+    public static final int POINTS_PER_LEVEL = 10;
+    public static final int POINTS_BEFORE_CHALLENGE = 3;
+    public static final int LEVEL_ENTRY_POINTS = 1;
+    public static final int CHALLENGE_POINTS = 7;
     private GameDisplay gameDisplay;
     private List<GameLevel> gameLevels;
     private GamePlay gamePlay;
     private Runnable onFinishListener;
     private GameLevel gameLevel;
     private Iterator<GameLevel> gameLevelIterator;
-    private List<LevelEntry> currentLevelEntries;
     private Iterator<LevelEntry> currentLevelEntriesIterator;
     private LevelEntry currentLevelEntry;
 
@@ -33,29 +33,32 @@ public class Game implements Runnable {
         this.onFinishListener = onFinishListener;
     }
 
-    @Override
-    public void run() {
+    public void startGame() {
         showHomeView();
+    }
 
+    public void finishGame() {
         onFinishListener.run();
     }
 
     public void showHomeView() {
-        HomeView homeView = new HomeView((m) -> {
-            showCreateCharacterView();
-        });
+        HomeView homeView = new HomeView((m) -> showCreateCharacterView());
 
-        gameDisplay.draw(new MainDecoratorView(homeView, (s) -> {
-            onFinishListener.run();
-        }));
+        drawWithDecorator(homeView);
+    }
+
+    public void drawWithDecorator(View view) {
+        gameDisplay.draw(new MainDecoratorView(view, (s) -> finishGame()));
     }
 
     public void showCreateCharacterView() {
-        gameDisplay.draw(new CreateCharacterView((name) -> {
+        CreateCharacterView view = new CreateCharacterView((name) -> {
             //Just chose a character,
             initiateGamePlay(name);
             showGamePlayView();
-        }));
+        });
+
+        drawWithDecorator(view);
     }
 
     public void initiateGamePlay(String name) {
@@ -65,36 +68,77 @@ public class Game implements Runnable {
     }
 
     public void showGamePlayView() {
-        gameDisplay.draw(new GamePlayView(
+
+        while (true) {
+            if (hasMoreEntries()) {
+                moveToNextLevelEntry();
+                showTranslationView();
+            } else {
+                if (isReadyForChallenge()) {
+                    showChallengeView();
+                } else if (!hasMoreEntries()) {
+                    moveToNextLevel();
+                } else {
+                    showGameOver();
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean isReadyForChallenge() {
+        int pointsAfterLastLevel = gamePlay.getPoints() % POINTS_PER_LEVEL;
+
+        return pointsAfterLastLevel > 0 && pointsAfterLastLevel % POINTS_BEFORE_CHALLENGE == 0;
+    }
+
+    private void showChallengeView() {
+
+        drawWithDecorator(new ChallengeView(
                 gamePlay,
                 gameLevel,
+                (o) -> {
+                    gamePlay.addToPoints(CHALLENGE_POINTS);
+                },
+                (o) -> {
+                    restartLevel();
+                    gamePlay.addToPoints(0 - Math.min(gamePlay.getPoints(), POINTS_BEFORE_CHALLENGE));
+                }));
+    }
+
+    private void restartLevel() {
+        currentLevelEntriesIterator = gameLevel.getLevelEntries().iterator();
+        currentLevelEntry = null;
+    }
+
+    private void showTranslationView() {
+
+        drawWithDecorator(new TranslationView(
+                currentLevelEntry,
                 (exps) -> {
                     //Like saying next
-//                    gamePlay.addToPoints(currentLevelEntry.getPoints());
-                    if (gamePlay.getPoints() % 10 == 0) {
-                        if (gameLevelIterator.hasNext()) {
-                            gameLevel = gameLevelIterator.next();
-                            showGamePlayView();
-                        } else {
-                            moveToNextLevel();
-                        }
-                    } else {
-                        showGamePlayView();
-                    }
+                    gamePlay.addToPoints(LEVEL_ENTRY_POINTS);
                 }));
     }
 
     private void showGameOver() {
-
     }
 
     private void moveToNextLevel() {
 
+        gameLevel = gameLevelIterator.next();
+        currentLevelEntriesIterator = gameLevel.getLevelEntries().iterator();
     }
 
     public void prepareGameLevels() {
 
-        gameLevels = new ArrayList<>();
+        gameLevels = fetchGameLevels();
+
+        gameLevelIterator = gameLevels.iterator();
+    }
+
+    public List<GameLevel> fetchGameLevels() {
+        List<GameLevel> gameLevels = new ArrayList<>();
 
         gameLevels.add(
                 GameLevel.builder()
@@ -104,11 +148,31 @@ public class Game implements Runnable {
                         .build()
         );
 
-        gameLevelIterator = gameLevels.iterator();
-        gameLevel = gameLevelIterator.next();
-        currentLevelEntries = gameLevel.getLevelEntries();
-        currentLevelEntriesIterator = currentLevelEntries.iterator();
-        currentLevelEntry = currentLevelEntriesIterator.next();
+        gameLevels.add(
+                GameLevel.builder()
+                        .addLevelEntry(LevelEntry.of("Let me buy you dinner", "Erat legabzeh", "Erat Legabzesh"))
+                        .addLevelEntry(LevelEntry.of("Are you feeling better?", "Teshaleh?", "Teshalesh?"))
+                        .addLevelEntry(LevelEntry.of("I'm going to kill you", "Egelehalew", "Egeleshalew"))
+                        .build()
+        );
 
+        return gameLevels;
+    }
+
+    private boolean hasMoreLevels() {
+        return gameLevelIterator != null && gameLevelIterator.hasNext();
+    }
+
+    private boolean hasMoreEntries() {
+        return currentLevelEntriesIterator != null && currentLevelEntriesIterator.hasNext();
+    }
+
+    public void moveToNextLevelEntry() {
+        currentLevelEntry = currentLevelEntriesIterator.next();
+    }
+
+    @Override
+    public void run() {
+        startGame();
     }
 }

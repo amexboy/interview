@@ -60,7 +60,7 @@ public class IOStreamGameDisplay implements GameDisplay {
         String input = scanner.nextLine();
         int index = Integer.parseInt(input);
 
-        if (index >= totalMenus) {
+        if (index > totalMenus) {
             throw new RuntimeException();
         }
 
