@@ -13,7 +13,7 @@ import spock.lang.Specification
 class DecoratorTest extends Specification {
     def "Verify decorator prepends the title correctly"() {
         given:
-        View home = new HomeView(null)
+        View home = new HomeView(null, null)
 
         when:
         View decoratedView = new MainDecoratorView(home, null)
@@ -25,7 +25,7 @@ class DecoratorTest extends Specification {
     
     def "Verify decorator adds the exit menu correctly"() {
         given:
-        View home = new HomeView(null)
+        View home = new HomeView(null, null)
 
         when:
         View decoratedView = new MainDecoratorView(home, null)
@@ -37,7 +37,7 @@ class DecoratorTest extends Specification {
     
     def "Verify decorator adds the header correctly"() {
         given:
-        View home = new HomeView(null)
+        View home = new HomeView(null, null)
 
         when:
         View decoratedView = new MainDecoratorView(home, null)

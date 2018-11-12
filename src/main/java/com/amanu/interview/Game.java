@@ -4,6 +4,7 @@ import com.amanu.interview.display.GameDisplay;
 import com.amanu.interview.game.GameLevel;
 import com.amanu.interview.game.GamePlay;
 import com.amanu.interview.game.LevelEntry;
+import com.amanu.interview.persistence.GamePlayPersistenceHandler;
 import com.amanu.interview.view.*;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class Game implements Runnable {
     private Iterator<GameLevel> gameLevelIterator;
     private Iterator<LevelEntry> currentLevelEntriesIterator;
     private LevelEntry currentLevelEntry;
+    private GamePlayPersistenceHandler gamePlayPersistenceHandler;
 
     public Game(GameDisplay gameDisplay, Runnable onFinishListener) {
         this.gameDisplay = gameDisplay;
@@ -41,14 +43,36 @@ public class Game implements Runnable {
         onFinishListener.run();
     }
 
-    public void showHomeView() {
-        HomeView homeView = new HomeView((m) -> showCreateCharacterView());
+    public void saveAndFinishGame() {
+        if (gamePlay != null) {
+            gamePlayPersistenceHandler.persistGamePlay(gamePlay);
+        }
 
-        drawWithDecorator(homeView);
+        onFinishListener.run();
     }
 
-    public void drawWithDecorator(View view) {
+    public void showHomeView() {
+        HomeView homeView = new HomeView(
+                (m) -> showCreateCharacterView(),
+                (m) -> {
+                    this.gamePlay = gamePlayPersistenceHandler.getPreviousGamePlay();
+                    if (gamePlay == null) {
+                        showCreateCharacterView();
+                    } else {
+                        prepareGameLevels();
+                        showGamePlayView();
+                    }
+                });
+
+        drawWithMainDecorator(homeView);
+    }
+
+    public void drawWithMainDecorator(View view) {
         gameDisplay.draw(new MainDecoratorView(view, (s) -> finishGame()));
+    }
+
+    public void drawWithGamePlayDecorator(View view) {
+        gameDisplay.draw(new GamePlayDecoratorView(view, gamePlay, (s) -> saveAndFinishGame()));
     }
 
     public void showCreateCharacterView() {
@@ -58,7 +82,7 @@ public class Game implements Runnable {
             showGamePlayView();
         });
 
-        drawWithDecorator(view);
+        drawWithMainDecorator(view);
     }
 
     public void initiateGamePlay(String name) {
@@ -76,7 +100,7 @@ public class Game implements Runnable {
             } else {
                 if (isReadyForChallenge()) {
                     showChallengeView();
-                } else if (!hasMoreEntries()) {
+                } else if (!hasMoreEntries() && hasMoreLevels()) {
                     moveToNextLevel();
                 } else {
                     showGameOver();
@@ -94,7 +118,7 @@ public class Game implements Runnable {
 
     private void showChallengeView() {
 
-        drawWithDecorator(new ChallengeView(
+        drawWithGamePlayDecorator(new ChallengeView(
                 gamePlay,
                 gameLevel,
                 (o) -> {
@@ -113,7 +137,7 @@ public class Game implements Runnable {
 
     private void showTranslationView() {
 
-        drawWithDecorator(new TranslationView(
+        drawWithGamePlayDecorator(new TranslationView(
                 currentLevelEntry,
                 (exps) -> {
                     //Like saying next
@@ -174,5 +198,9 @@ public class Game implements Runnable {
     @Override
     public void run() {
         startGame();
+    }
+
+    public void setGamePlayPersistenceHandler(GamePlayPersistenceHandler gamePlayPersistenceHandler) {
+        this.gamePlayPersistenceHandler = gamePlayPersistenceHandler;
     }
 }

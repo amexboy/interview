@@ -34,7 +34,8 @@ class GameTest extends Specification {
 
         then:
         out.toString().contains("1. Start Game")
-        out.toString().contains("2. Exit")
+        out.toString().contains("2. Restore Last Game")
+        out.toString().contains("3. Exit")
 
     }
 
@@ -51,7 +52,11 @@ class GameTest extends Specification {
             void run() {
             }
         }))
-
+        
+        //Cutting the game short after the create character view
+        doNothing()
+                .when(game)
+                .showGamePlayView()
         when:
         inputSrc.write("1\n1\n".bytes)
         inputSrc.flush()

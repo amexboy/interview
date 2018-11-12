@@ -11,10 +11,11 @@ public class HomeView implements View {
 
     private List<Menu> menus;
 
-    public HomeView(Consumer<Menu> onStart) {
+    public HomeView(Consumer<Menu> onStart, Consumer<Menu> onRestore) {
         this.menus = new ArrayList<>();
 
         this.menus.add(new Menu("Start Game", onStart));
+        this.menus.add(new Menu("Restore Last Game", onRestore));
     }
 
     @Override
